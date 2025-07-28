@@ -17,6 +17,7 @@ void main() {
         '/login/': (context) => LoginView(),
         '/register/': (context) => RegisterView(),
         '/verify/': (context) => VerifyEmail(),
+        '/notes/': (context) => NotesView(),
       },
     ),
   );
@@ -39,11 +40,11 @@ class HomePage extends StatelessWidget {
               if (user.emailVerified) {
                 return const NotesView();
               } else {
-                print('verify');
+                log('verify');
                 return const VerifyEmail();
               }
             } else {
-              print('login');
+              log('login');
               return const LoginView();
             }
             return const Text('Done');
