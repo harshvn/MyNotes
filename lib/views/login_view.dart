@@ -1,5 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:notes/constants/routes.dart';
+import 'package:notes/main.dart';
+import 'package:notes/utlities/showerror.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -56,12 +63,31 @@ class _LoginViewState extends State<LoginView> {
                       email: email,
                       password: password,
                     );
-                Navigator.of(
-                  context,
-                ).pushNamedAndRemoveUntil('/notes/', (route) => false);
+                final user = FirebaseAuth.instance.currentUser;
+                if (user != null) {
+                  if (user.emailVerified) {
+                    Navigator.of(
+                      context,
+                    ).pushNamedAndRemoveUntil(notesroute, (route) => false);
+                  } else {
+                    Navigator.of(
+                      context,
+                    ).pushNamedAndRemoveUntil('/verify/', (route) => false);
+                  }
+                } else {
+                  await showErrorDialog(context, 'Enter Email ID');
+                }
               } on FirebaseAuthException catch (e) {
-                print(e.code);
-                print('something bad happened');
+                if (e.code == 'user-not-found') {
+                  // ignore: use_build_context_synchronously
+                  log(e.toString());
+                  await showErrorDialog(context, 'User not found');
+                } else if (e.code == 'wrong-password') {
+                  log(e.toString());
+                  await showErrorDialog(context, 'Wrong Password');
+                } else {
+                  await showErrorDialog(context, e.code.toString());
+                }
               }
             },
             child: const Text('Login'),
@@ -70,7 +96,7 @@ class _LoginViewState extends State<LoginView> {
             onPressed: () {
               Navigator.of(
                 context,
-              ).pushNamedAndRemoveUntil('/register/', (route) => false);
+              ).pushNamedAndRemoveUntil(regroute, (route) => false);
             },
             child: Text("Not Registered yet? Register here"),
           ),

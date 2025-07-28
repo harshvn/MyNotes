@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/constants/routes.dart';
 import 'package:notes/firebase_options.dart';
 import 'package:notes/views/login_view.dart';
 import 'package:notes/views/register_view.dart';
@@ -14,10 +15,10 @@ void main() {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const HomePage(),
       routes: {
-        '/login/': (context) => LoginView(),
-        '/register/': (context) => RegisterView(),
+        loginroute: (context) => LoginView(),
+        regroute: (context) => RegisterView(),
         '/verify/': (context) => VerifyEmail(),
-        '/notes/': (context) => NotesView(),
+        notesroute: (context) => NotesView(),
       },
     ),
   );
@@ -37,10 +38,13 @@ class HomePage extends StatelessWidget {
           case ConnectionState.done:
             final user = FirebaseAuth.instance.currentUser;
             if (user != null) {
+              log('haha');
               if (user.emailVerified) {
+                log('haha2');
                 return const NotesView();
               } else {
                 log('verify');
+                log('haha3');
                 return const VerifyEmail();
               }
             } else {
@@ -81,7 +85,7 @@ class _NotesViewState extends State<NotesView> {
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(
                       context,
-                    ).pushNamedAndRemoveUntil('/login/', (_) => false);
+                    ).pushNamedAndRemoveUntil(loginroute, (_) => false);
                   }
               }
             },

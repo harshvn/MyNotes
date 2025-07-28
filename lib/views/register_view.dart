@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:notes/constants/routes.dart';
 import 'package:notes/firebase_options.dart';
 
 class RegisterView extends StatefulWidget {
@@ -61,6 +62,9 @@ class _RegisterViewState extends State<RegisterView> {
                 print(userCredential);
               } on FirebaseAuthException catch (e) {
                 print(e.code);
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil('/verify/', (route) => false);
               }
             },
             child: const Text('Register'),
@@ -69,7 +73,7 @@ class _RegisterViewState extends State<RegisterView> {
             onPressed: () {
               Navigator.of(
                 context,
-              ).pushNamedAndRemoveUntil("/login/", (route) => false);
+              ).pushNamedAndRemoveUntil(loginroute, (route) => false);
             },
             child: const Text("Go back to Login Page"),
           ),
