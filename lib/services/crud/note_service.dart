@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -99,9 +100,19 @@ const createNoteTable = '''CREATE TABLE IF NOT EXISTS "note" (
 class NoteService {
   Database? _db;
   List<DatabaseNote> _notes = [];
+  // NoteService._sharedInstance();
+  static final NoteService _shared = NoteService._sharedInstance();
+  NoteService._sharedInstance() {
+    _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
+      onListen: () {
+        _notesStreamController.sink.add(_notes);
+      },
+    );
+  }
+  factory NoteService() => _shared;
   DatabaseUser? _user;
-  final _notesStreamController =
-      StreamController<List<DatabaseNote>>.broadcast();
+  late final StreamController<List<DatabaseNote>> _notesStreamController;
+  Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
   Future<void> close() async {
     final db = _db;
     if (db == null) {
@@ -145,6 +156,7 @@ class NoteService {
       throw DatabaseIsNotOpen();
     } else {
       return db;
+      log(db.toString());
     }
   }
 
@@ -272,7 +284,7 @@ class NoteService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
 
-    final results = await db.query(
+    var results = await db.query(
       userTable,
       limit: 1,
       where: 'email = ?',

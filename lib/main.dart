@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/constants/routes.dart';
 import 'package:notes/firebase_options.dart';
+import 'package:notes/notes/new_notes_view.dart';
+import 'package:notes/notes/notes_view.dart';
 import 'package:notes/services/crud/note_service.dart';
 import 'package:notes/views/login_view.dart';
 import 'package:notes/views/register_view.dart';
@@ -21,6 +23,7 @@ void main() {
         regroute: (context) => RegisterView(),
         '/verify/': (context) => VerifyEmail(),
         notesroute: (context) => NotesView(),
+        newnotesroute: (constext) => NewNotesView(),
       },
     ),
   );
@@ -63,50 +66,6 @@ class HomePage extends StatelessWidget {
 }
 
 enum MenuAction { logout }
-
-class NotesView extends StatefulWidget {
-  const NotesView({super.key});
-
-  @override
-  State<NotesView> createState() => _NotesViewState();
-}
-
-class _NotesViewState extends State<NotesView> {
-  late final NoteService _noteService;
-  String get useremail = Authservice.firebase().current!.email!;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Main UI"),
-        actions: [
-          PopupMenuButton<MenuAction>(
-            onSelected: (value) async {
-              switch (value) {
-                case MenuAction.logout:
-                  final shouldlogout = await showLogOutDialog(context);
-                  if (shouldlogout) {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.of(
-                      context,
-                    ).pushNamedAndRemoveUntil(loginroute, (_) => false);
-                  }
-              }
-            },
-            itemBuilder: (context) {
-              return const [
-                PopupMenuItem<MenuAction>(
-                  value: MenuAction.logout,
-                  child: const Text('Log out'),
-                ),
-              ];
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 Future<bool> showLogOutDialog(BuildContext context) {
   return showDialog<bool>(
