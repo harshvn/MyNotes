@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/constants/routes.dart';
 import 'package:notes/main.dart';
+import 'package:notes/notes/notes_list_view.dart';
 import 'package:notes/services/auth/auth_service.dart';
 import 'package:notes/services/crud/note_service.dart';
+import 'package:notes/utlities/showerror.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -72,16 +74,15 @@ class _NotesViewState extends State<NotesView> {
                     case ConnectionState.active:
                       if (snapshot.hasData) {
                         final allnotes = snapshot.data as List<DatabaseNote>;
-                        return ListView.builder(
-                          itemCount: allnotes.length,
-                          itemBuilder: (context, index) {
-                            final note = allnotes[index];
-                            return ListTile(
-                              title: Text(
-                                note.text,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
+                        return NotesListView(
+                          onDeleteNote: (note) async {
+                            await _noteService.deleteNote(id: note.id);
+                          },
+                          notes: allnotes,
+                          onTap: (note) {
+                            Navigator.of(
+                              context,
+                            ).pushNamed(newnotesroute, arguments: note);
                           },
                         );
                       } else {
@@ -90,6 +91,7 @@ class _NotesViewState extends State<NotesView> {
                     default:
                       return const Text('hello');
                   }
+                  return const Text('Hellos');
                 },
               );
 

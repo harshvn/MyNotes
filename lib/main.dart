@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/constants/routes.dart';
 import 'package:notes/firebase_options.dart';
-import 'package:notes/notes/new_notes_view.dart';
+import 'package:notes/notes/create_update_note_view.dart';
 import 'package:notes/notes/notes_view.dart';
 import 'package:notes/services/crud/note_service.dart';
 import 'package:notes/views/login_view.dart';
@@ -23,7 +23,7 @@ void main() {
         regroute: (context) => RegisterView(),
         '/verify/': (context) => VerifyEmail(),
         notesroute: (context) => NotesView(),
-        newnotesroute: (constext) => NewNotesView(),
+        newnotesroute: (constext) => createupdatenoteview(),
       },
     ),
   );
@@ -66,29 +66,3 @@ class HomePage extends StatelessWidget {
 }
 
 enum MenuAction { logout }
-
-Future<bool> showLogOutDialog(BuildContext context) {
-  return showDialog<bool>(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('Sign Out'),
-        content: const Text('are you sure you want to logout'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: const Text('Logout'),
-          ),
-        ],
-      );
-    },
-  ).then((value) => value ?? false);
-}
