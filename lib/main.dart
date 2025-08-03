@@ -21,7 +21,7 @@ void main() {
       routes: {
         loginroute: (context) => LoginView(),
         regroute: (context) => RegisterView(),
-        '/verify/': (context) => VerifyEmail(),
+        verifyroute: (context) => VerifyEmail(),
         notesroute: (context) => NotesView(),
         newnotesroute: (constext) => createupdatenoteview(),
       },
@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
           case ConnectionState.done:
             final user = FirebaseAuth.instance.currentUser;
             if (user != null) {
-              log('haha');
+              log(user.toString());
               if (user.emailVerified) {
                 log('haha2');
                 return const NotesView();
@@ -56,7 +56,6 @@ class HomePage extends StatelessWidget {
               log('login');
               return const LoginView();
             }
-            return const Text('Done');
           default:
             return CircularProgressIndicator();
         }

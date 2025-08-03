@@ -59,12 +59,14 @@ class _RegisterViewState extends State<RegisterView> {
                       email: email,
                       password: password,
                     );
+                final user = FirebaseAuth.instance.currentUser;
+                await user?.sendEmailVerification();
                 print(userCredential);
-              } on FirebaseAuthException catch (e) {
-                print(e.code);
                 Navigator.of(
                   context,
                 ).pushNamedAndRemoveUntil('/verify/', (route) => false);
+              } on FirebaseAuthException catch (e) {
+                print(e.code);
               }
             },
             child: const Text('Register'),

@@ -5,9 +5,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:notes/constants/routes.dart';
-import 'package:notes/main.dart';
 import 'package:notes/utlities/dialog/error_dialog.dart';
-import 'package:notes/utlities/showerror.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -67,6 +65,7 @@ class _LoginViewState extends State<LoginView> {
                 final user = FirebaseAuth.instance.currentUser;
                 if (user != null) {
                   if (user.emailVerified) {
+                    log(user.emailVerified.toString());
                     Navigator.of(
                       context,
                     ).pushNamedAndRemoveUntil(notesroute, (route) => false);
@@ -80,7 +79,6 @@ class _LoginViewState extends State<LoginView> {
                 }
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'user-not-found') {
-                  // ignore: use_build_context_synchronously
                   log(e.toString());
                   await showErrorDialog(context, 'User not found');
                 } else if (e.code == 'wrong-password') {
