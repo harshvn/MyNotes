@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "916226322134",
+    "project_id": "mynotes8h8",
+    "storage_bucket": "mynotes8h8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916226322134:android:9934c0f88cb3a14065e377",
+        "android_client_info": {
+          "package_name": "com.keeptracks.notes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFF7LooFNdNtqB6fIVnw2vmAHtA7ZvzV4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
